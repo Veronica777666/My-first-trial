@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动物射击游戏</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #1a1a2e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      user-select: none;
+    }
+    h1 {
+      color: #e0e0e0;
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+    #hud {
+      display: flex;
+      gap: 40px;
+      color: #fff;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    #hud span { background: rgba(255,255,255,0.08); padding: 4px 16px; border-radius: 20px; }
+    #hud .label { color: #aaa; font-size: 0.85rem; }
+    canvas {
+      display: block;
+      border-radius: 12px;
+      cursor: crosshair;
+      box-shadow: 0 0 40px rgba(100, 180, 255, 0.3);
+    }
+    #controls {
+      color: #888;
+      font-size: 0.82rem;
+      margin-top: 10px;
+      text-align: center;
+      line-height: 1.8;
+    }
+    #legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #legend span {
+      background: rgba(255,255,255,0.07);
+      color: #ddd;
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 动物射击游戏</h1>
+  <div id="hud">
+    <span><div class="label">得分</div><strong id="scoreDisplay">0</strong></span>
+    <span><div class="label">子弹</div><strong id="ammoDisplay">30</strong></span>
+    <span><div class="label">时间</div><strong id="timerDisplay">60</strong>s</span>
+    <span><div class="label">连击</div><strong id="comboDisplay">x1</strong></span>
+  </div>
+  <canvas id="gameCanvas" width="720" height="480"></canvas>
+  <div id="controls">
+    ← → 方向键移动炮台 &nbsp;|&nbsp; 空格键 / 鼠标点击 发射 &nbsp;|&nbsp; 打中动物得分
+  </div>
+  <div id="legend">
+    <span>🐰 兔子 10分</span>
+    <span>🦊 狐狸 20分</span>
+    <span>🦅 老鹰 30分</span>
+    <span>🐺 狼 40分</span>
+    <span>🐻 熊 50分</span>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    // ─── Constants ────────────────────────────────────────────────
+    const ANIMAL_ZONE_TOP = 40;
+    const ANIMAL_ZONE_BTM = H * 0.55;
+    const GROUND_Y = H - 60;
+    const SHOOTER_Y = GROUND_Y - 10;
+    const SHOOTER_W = 60, SHOOTER_H = 28;
+    const BULLET_SPEED = 10;
+    const MAX_AMMO = 30;
+    const GAME_TIME = 60;
+
+    const ANIMAL_TYPES = [
+      { emoji: '🐰', name: '兔子', score: 10, speed: 2.8, size: 36, color: '#f9c6d0' },
+      { emoji: '🦊', name: '狐狸', score: 20, speed: 2.0, size: 38, color: '#ffb347' },
+      { emoji: '🦅', name: '老鹰', score: 30, speed: 3.5, size: 34, color: '#87ceeb' },
+      { emoji: '🐺', name: '狼',   score: 40, speed: 2.4, size: 38, color: '#b0c4de' },
+      { emoji: '🐻', name: '熊',   score: 50, speed: 1.2, size: 44, color: '#d2a679' },
+    ];
+
+    // ─── Game State ───────────────────────────────────────────────
+    let state = 'start'; // 'start' | 'playing' | 'over'
+    let score = 0;
+    let ammo = MAX_AMMO;
+    let timeLeft = GAME_TIME;
+    let comboCount = 1;
+    let comboTimer = 0;
+    let shooter = { x: W / 2, speed: 0, angle: 0 };
+    let bullets = [];
+    let animals = [];
+    let particles = [];
+    let floatTexts = [];
+    let keys = {};
+    let lastTime = 0;
+    let timerInterval = null;
+
+    // ─── Background ───────────────────────────────────────────────
+    function drawBackground() {
+      // Sky gradient
+      const sky = ctx.createLinearGradient(0, 0, 0, ANIMAL_ZONE_BTM + 20);
+      sky.addColorStop(0, '#0a0a1e');
+      sky.addColorStop(1, '#1a3a5c');
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, W, ANIMAL_ZONE_BTM + 20);
+
+      // Stars
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      for (let i = 0; i < 60; i++) {
+        const sx = (i * 137.5) % W;
+        const sy = (i * 97.3) % (ANIMAL_ZONE_BTM * 0.8);
+        const r = (i % 3 === 0) ? 1.2 : 0.7;
+        ctx.beginPath();
+        ctx.arc(sx, sy, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Ground area
+      const ground = ctx.createLinearGradient(0, ANIMAL_ZONE_BTM, 0, H);
+      ground.addColorStop(0, '#1e3a1e');
+      ground.addColorStop(0.4, '#2d5a1b');
+      ground.addColorStop(1, '#1a2a0a');
+      ctx.fillStyle = ground;
+      ctx.fillRect(0, ANIMAL_ZONE_BTM, W, H - ANIMAL_ZONE_BTM);
+
+      // Ground line
+      ctx.strokeStyle = '#4a8a2a';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, ANIMAL_ZONE_BTM + 20);
+      ctx.lineTo(W, ANIMAL_ZONE_BTM + 20);
+      ctx.stroke();
+
+      // Shooting platform
+      const platGrad = ctx.createLinearGradient(0, GROUND_Y, 0, H);
+      platGrad.addColorStop(0, '#5a3e28');
+      platGrad.addColorStop(1, '#3a2518');
+      ctx.fillStyle = platGrad;
+      ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+
+      ctx.strokeStyle = '#8a6040';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, GROUND_Y);
+      ctx.lineTo(W, GROUND_Y);
+      ctx.stroke();
+    }
+
+    // ─── Shooter ──────────────────────────────────────────────────
+    function drawShooter() {
+      const x = shooter.x;
+      const y = SHOOTER_Y;
+
+      // Base platform
+      ctx.fillStyle = '#4a6fa5';
+      ctx.beginPath();
+      ctx.roundRect(x - SHOOTER_W / 2, y + 4, SHOOTER_W, 18, 5);
+      ctx.fill();
+
+      ctx.fillStyle = '#5a8fd5';
+      ctx.beginPath();
+      ctx.roundRect(x - SHOOTER_W / 2 + 2, y + 6, SHOOTER_W - 4, 14, 4);
+      ctx.fill();
+
+      // Cannon barrel (rotates slightly toward aim)
+      ctx.save();
+      ctx.translate(x, y + 4);
+      ctx.fillStyle = '#2a3a5a';
+      ctx.beginPath();
+      ctx.roundRect(-6, -22, 12, 24, 4);
+      ctx.fill();
+      ctx.fillStyle = '#3a5a8a';
+      ctx.beginPath();
+      ctx.roundRect(-5, -24, 10, 10, 3);
+      ctx.fill();
+      ctx.restore();
+
+      // Wheels
+      for (const ox of [-18, 18]) {
+        ctx.fillStyle = '#2a2a2a';
+        ctx.beginPath();
+        ctx.arc(x + ox, y + 20, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#888';
+        ctx.beginPath();
+        ctx.arc(x + ox, y + 20, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Sight indicator
+      ctx.strokeStyle = 'rgba(255, 80, 80, 0.7)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(x, y - 24);
+      ctx.lineTo(x, 0);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // ─── Animals ──────────────────────────────────────────────────
+    function spawnAnimal() {
+      const type = ANIMAL_TYPES[Math.floor(Math.random() * ANIMAL_TYPES.length)];
+      const fromLeft = Math.random() < 0.5;
+      animals.push({
+        ...type,
+        x: fromLeft ? -50 : W + 50,
+        y: ANIMAL_ZONE_TOP + Math.random() * (ANIMAL_ZONE_BTM - ANIMAL_ZONE_TOP - type.size),
+        dx: fromLeft ? type.speed + Math.random() * 1.2 : -(type.speed + Math.random() * 1.2),
+        dy: (Math.random() - 0.5) * 0.8,
+        hp: 1,
+        hitTimer: 0,
+        wobble: Math.random() * Math.PI * 2,
+      });
+    }
+
+    function updateAnimals(dt) {
+      // Spawn logic
+      if (animals.length < 8 && Math.random() < 0.02) spawnAnimal();
+
+      animals = animals.filter(a => {
+        a.x += a.dx;
+        a.y += a.dy;
+        a.wobble += 0.08;
+        a.y += Math.sin(a.wobble) * 0.3;
+        if (a.hitTimer > 0) a.hitTimer -= dt;
+
+        // Bounce vertically
+        if (a.y < ANIMAL_ZONE_TOP) { a.y = ANIMAL_ZONE_TOP; a.dy = Math.abs(a.dy); }
+        if (a.y > ANIMAL_ZONE_BTM - a.size) { a.y = ANIMAL_ZONE_BTM - a.size; a.dy = -Math.abs(a.dy); }
+
+        // Random direction change
+        if (Math.random() < 0.005) a.dx *= -1;
+
+        // Remove if off screen
+        return a.x > -80 && a.x < W + 80;
+      });
+    }
+
+    function drawAnimals() {
+      for (const a of animals) {
+        const flash = a.hitTimer > 0;
+        ctx.save();
+        ctx.translate(a.x + a.size / 2, a.y + a.size / 2);
+        if (a.dx < 0) ctx.scale(-1, 1);
+
+        if (flash) {
+          ctx.shadowColor = '#ff4444';
+          ctx.shadowBlur = 20;
+        }
+
+        // Score badge shadow
+        ctx.font = `${a.size}px serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(a.emoji, 0, 0);
+
+        ctx.restore();
+
+        // Score badge
+        ctx.save();
+        ctx.fillStyle = 'rgba(0,0,0,0.55)';
+        ctx.beginPath();
+        ctx.roundRect(a.x + a.size / 2 - 14, a.y - 16, 28, 14, 6);
+        ctx.fill();
+        ctx.fillStyle = a.color;
+        ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`+${a.score}`, a.x + a.size / 2, a.y - 9);
+        ctx.restore();
+      }
+    }
+
+    // ─── Bullets ──────────────────────────────────────────────────
+    function fireBullet() {
+      if (ammo <= 0 || state !== 'playing') return;
+      ammo--;
+      updateHUD();
+      bullets.push({ x: shooter.x, y: SHOOTER_Y - 24, vy: -BULLET_SPEED });
+    }
+
+    function updateBullets() {
+      bullets = bullets.filter(b => {
+        b.y += b.vy;
+        return b.y > -10;
+      });
+    }
+
+    function drawBullets() {
+      for (const b of bullets) {
+        // Glow
+        ctx.shadowColor = '#ffdd44';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = '#ffe566';
+        ctx.beginPath();
+        ctx.ellipse(b.x, b.y, 4, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Trail
+        ctx.fillStyle = 'rgba(255, 200, 50, 0.25)';
+        ctx.beginPath();
+        ctx.ellipse(b.x, b.y + 12, 2.5, 10, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // ─── Hit Detection ────────────────────────────────────────────
+    function checkCollisions() {
+      for (let bi = bullets.length - 1; bi >= 0; bi--) {
+        const b = bullets[bi];
+        for (let ai = animals.length - 1; ai >= 0; ai--) {
+          const a = animals[ai];
+          const pad = 6;
+          if (b.x > a.x - pad && b.x < a.x + a.size + pad &&
+              b.y > a.y - pad && b.y < a.y + a.size + pad) {
+
+            // Hit!
+            bullets.splice(bi, 1);
+            animals.splice(ai, 1);
+
+            const pts = a.score * comboCount;
+            score += pts;
+            comboCount++;
+            comboTimer = 2.0;
+            updateHUD();
+
+            spawnParticles(a.x + a.size / 2, a.y + a.size / 2, a.color);
+            floatTexts.push({
+              x: a.x + a.size / 2,
+              y: a.y,
+              text: `+${pts}`,
+              alpha: 1,
+              vy: -1.8,
+              color: a.color,
+              size: comboCount > 2 ? 22 : 16,
+            });
+            if (comboCount > 2) {
+              floatTexts.push({
+                x: a.x + a.size / 2,
+                y: a.y + 22,
+                text: `${comboCount - 1}x 连击!`,
+                alpha: 1,
+                vy: -1.2,
+                color: '#ffdd44',
+                size: 14,
+              });
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    // ─── Particles ────────────────────────────────────────────────
+    function spawnParticles(x, y, color) {
+      for (let i = 0; i < 18; i++) {
+        const angle = (Math.PI * 2 * i) / 18 + Math.random() * 0.4;
+        const speed = 2 + Math.random() * 4;
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1,
+          r: 2 + Math.random() * 3,
+          color,
+        });
+      }
+      // Star burst
+      for (let i = 0; i < 6; i++) {
+        particles.push({
+          x, y,
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.5) * 6,
+          alpha: 1,
+          r: 4,
+          color: '#ffffff',
+        });
+      }
+    }
+
+    function updateParticles() {
+      particles = particles.filter(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.12;
+        p.alpha -= 0.025;
+        return p.alpha > 0;
+      });
+    }
+
+    function drawParticles() {
+      for (const p of particles) {
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function updateFloatTexts() {
+      floatTexts = floatTexts.filter(t => {
+        t.y += t.vy;
+        t.alpha -= 0.018;
+        return t.alpha > 0;
+      });
+    }
+
+    function drawFloatTexts() {
+      for (const t of floatTexts) {
+        ctx.save();
+        ctx.globalAlpha = t.alpha;
+        ctx.fillStyle = t.color;
+        ctx.font = `bold ${t.size}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = 4;
+        ctx.fillText(t.text, t.x, t.y);
+        ctx.restore();
+      }
+    }
+
+    // ─── HUD ──────────────────────────────────────────────────────
+    function updateHUD() {
+      document.getElementById('scoreDisplay').textContent = score;
+      document.getElementById('ammoDisplay').textContent = ammo;
+      document.getElementById('timerDisplay').textContent = timeLeft;
+      document.getElementById('comboDisplay').textContent = `x${comboCount}`;
+    }
+
+    // ─── Screens ──────────────────────────────────────────────────
+    function drawStartScreen() {
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      ctx.font = 'bold 42px sans-serif';
+      ctx.fillStyle = '#fff';
+      ctx.shadowColor = '#4af';
+      ctx.shadowBlur = 20;
+      ctx.fillText('🎯 动物射击游戏', W / 2, H / 2 - 70);
+      ctx.shadowBlur = 0;
+
+      ctx.font = '20px sans-serif';
+      ctx.fillStyle = '#ccc';
+      ctx.fillText('← → 移动炮台    空格 / 点击 射击', W / 2, H / 2 - 10);
+      ctx.fillText('打中稀有动物得分更高！连击有倍数加成！', W / 2, H / 2 + 24);
+
+      // Start button
+      ctx.fillStyle = '#4a8fd5';
+      ctx.shadowColor = '#4af';
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.roundRect(W / 2 - 90, H / 2 + 60, 180, 50, 14);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText('开始游戏', W / 2, H / 2 + 85);
+      ctx.restore();
+    }
+
+    function drawGameOver() {
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,0,0,0.7)';
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      ctx.font = 'bold 38px sans-serif';
+      ctx.fillStyle = '#ff6655';
+      ctx.shadowColor = '#f44';
+      ctx.shadowBlur = 18;
+      ctx.fillText('游戏结束！', W / 2, H / 2 - 80);
+      ctx.shadowBlur = 0;
+
+      ctx.font = 'bold 30px sans-serif';
+      ctx.fillStyle = '#ffe566';
+      ctx.fillText(`最终得分: ${score}`, W / 2, H / 2 - 20);
+
+      const rank = score >= 500 ? '🏆 神枪手！' : score >= 300 ? '🥇 优秀！' : score >= 150 ? '🥈 不错！' : '🥉 继续加油！';
+      ctx.font = '22px sans-serif';
+      ctx.fillStyle = '#ccc';
+      ctx.fillText(rank, W / 2, H / 2 + 24);
+
+      ctx.fillStyle = '#4a8fd5';
+      ctx.shadowColor = '#4af';
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.roundRect(W / 2 - 90, H / 2 + 68, 180, 50, 14);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('再玩一次', W / 2, H / 2 + 93);
+      ctx.restore();
+    }
+
+    // ─── Game Loop ────────────────────────────────────────────────
+    function update(ts) {
+      const dt = Math.min((ts - lastTime) / 1000, 0.05);
+      lastTime = ts;
+
+      if (state !== 'playing') {
+        requestAnimationFrame(update);
+        return;
+      }
+
+      // Move shooter
+      if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
+        shooter.x = Math.max(SHOOTER_W / 2 + 5, shooter.x - 5);
+      }
+      if (keys['ArrowRight'] || keys['d'] || keys['D']) {
+        shooter.x = Math.min(W - SHOOTER_W / 2 - 5, shooter.x + 5);
+      }
+
+      // Combo decay
+      if (comboTimer > 0) {
+        comboTimer -= dt;
+        if (comboTimer <= 0) {
+          comboCount = 1;
+          updateHUD();
+        }
+      }
+
+      updateAnimals(dt);
+      updateBullets();
+      checkCollisions();
+      updateParticles();
+      updateFloatTexts();
+
+      // Auto-lose if out of ammo and no bullets flying
+      if (ammo <= 0 && bullets.length === 0) {
+        endGame();
+      }
+
+      draw();
+      requestAnimationFrame(update);
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      drawBackground();
+      drawAnimals();
+      drawBullets();
+      drawParticles();
+      drawShooter();
+      drawFloatTexts();
+
+      if (state === 'start') drawStartScreen();
+      if (state === 'over') drawGameOver();
+    }
+
+    function startGame() {
+      score = 0;
+      ammo = MAX_AMMO;
+      timeLeft = GAME_TIME;
+      comboCount = 1;
+      comboTimer = 0;
+      shooter.x = W / 2;
+      bullets = [];
+      animals = [];
+      particles = [];
+      floatTexts = [];
+      state = 'playing';
+      updateHUD();
+
+      // Pre-spawn some animals
+      for (let i = 0; i < 4; i++) spawnAnimal();
+
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (state !== 'playing') return;
+        timeLeft--;
+        updateHUD();
+        if (timeLeft <= 0) endGame();
+      }, 1000);
+    }
+
+    function endGame() {
+      state = 'over';
+      clearInterval(timerInterval);
+    }
+
+    // ─── Input ────────────────────────────────────────────────────
+    document.addEventListener('keydown', e => {
+      keys[e.key] = true;
+      if (e.key === ' ') {
+        e.preventDefault();
+        if (state === 'playing') fireBullet();
+        else if (state === 'start' || state === 'over') startGame();
+      }
+      if (e.key === 'Enter') {
+        if (state === 'start' || state === 'over') startGame();
+      }
+    });
+    document.addEventListener('keyup', e => { keys[e.key] = false; });
+
+    canvas.addEventListener('click', e => {
+      const rect = canvas.getBoundingClientRect();
+      const cx = e.clientX - rect.left;
+      const cy = e.clientY - rect.top;
+
+      if (state === 'playing') {
+        // Move shooter to click x, then fire
+        shooter.x = Math.max(SHOOTER_W / 2 + 5, Math.min(W - SHOOTER_W / 2 - 5, cx * (W / rect.width)));
+        fireBullet();
+        return;
+      }
+
+      // Button areas
+      const scaleX = W / rect.width;
+      const scaleY = H / rect.height;
+      const bx = cx * scaleX, by = cy * scaleY;
+
+      if (state === 'start' || state === 'over') {
+        const btnX = W / 2 - 90, btnY = H / 2 + 60;
+        if (bx > btnX && bx < btnX + 180 && by > btnY && by < btnY + 50) {
+          startGame();
+        }
+      }
+    });
+
+    canvas.addEventListener('mousemove', e => {
+      if (state !== 'playing') return;
+      const rect = canvas.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (W / rect.width);
+      // Gently follow mouse x for aim preview
+      shooter.x += (mx - shooter.x) * 0.12;
+      shooter.x = Math.max(SHOOTER_W / 2 + 5, Math.min(W - SHOOTER_W / 2 - 5, shooter.x));
+    });
+
+    // ─── Boot ─────────────────────────────────────────────────────
+    // Pre-spawn animals for the start screen preview
+    for (let i = 0; i < 6; i++) spawnAnimal();
+    requestAnimationFrame(ts => { lastTime = ts; requestAnimationFrame(update); });
+  </script>
+</body>
+</html>

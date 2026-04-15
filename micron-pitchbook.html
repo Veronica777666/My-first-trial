@@ -1643,5 +1643,758 @@
   </div>
 </div>
 
+
+<!-- ══════════════════════ PAGE 6 — FINANCIALS OVERVIEW ══════════════════════ -->
+<style>
+  /* ── FINANCIAL PAGE STYLES ── */
+  .fin-row { display: grid; gap: 20px; margin-bottom: 22px; }
+  .fin-row-2 { grid-template-columns: 1fr 1fr; }
+  .fin-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .fin-row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .fin-panel {
+    background: #fff;
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .fin-panel-header {
+    background: #0a1628;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .fin-panel-header span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .fin-panel-header em {
+    font-size: 10px;
+    color: #c8a84b;
+    font-style: normal;
+    letter-spacing: 1px;
+  }
+
+  .fin-panel-body { padding: 14px 16px; }
+
+  /* Bar chart simulation */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 110px;
+    padding-bottom: 0;
+  }
+
+  .bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .bar-value {
+    font-size: 9px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 2px;
+    white-space: nowrap;
+  }
+
+  .bar-rect {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    min-height: 4px;
+  }
+
+  .bar-label {
+    font-size: 9px;
+    color: #999;
+    margin-top: 4px;
+    text-align: center;
+  }
+
+  .bar-line-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Metric table */
+  .metric-table { width: 100%; border-collapse: collapse; }
+
+  .metric-table tr { border-bottom: 1px solid #f2f2f2; }
+  .metric-table tr:last-child { border-bottom: none; }
+
+  .metric-table td {
+    padding: 7px 4px;
+    font-size: 12px;
+    color: #333;
+    vertical-align: middle;
+  }
+
+  .metric-table td:first-child { color: #666; font-weight: 400; }
+  .metric-table td:last-child  { text-align: right; font-weight: 700; color: #0a1628; }
+
+  .badge-up   { color: #27ae60; font-size: 10px; font-weight: 700; }
+  .badge-down { color: #c0392b; font-size: 10px; font-weight: 700; }
+  .badge-flat { color: #888;    font-size: 10px; }
+
+  /* Income statement summary */
+  .income-table { width: 100%; border-collapse: collapse; }
+
+  .income-table th {
+    font-size: 10px;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 8px;
+    text-align: right;
+    border-bottom: 2px solid #0a1628;
+    background: #f8f8f8;
+  }
+
+  .income-table th:first-child { text-align: left; }
+
+  .income-table td {
+    padding: 7px 8px;
+    font-size: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: right;
+    color: #333;
+  }
+
+  .income-table td:first-child { text-align: left; color: #555; font-weight: 400; }
+
+  .income-table tr.subtotal td { background: #f8f6f0; font-weight: 600; color: #0a1628; }
+  .income-table tr.total   td { background: #0a1628; color: #fff; font-weight: 700; }
+  .income-table tr.total td:first-child { color: #c8a84b; }
+
+  .income-table .neg { color: #c0392b !important; }
+  .income-table .pos { color: #27ae60 !important; }
+
+  /* Cycle chart annotation */
+  .cycle-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .cycle-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+
+  .cycle-item .dot-sq {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .cycle-item .cycle-year { font-weight: 700; color: #0a1628; min-width: 50px; }
+  .cycle-item .cycle-desc { color: #555; }
+
+  /* Margin gauge */
+  .gauge-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .gauge-label { flex: 0 0 100px; font-size: 11px; color: #555; }
+
+  .gauge-track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .gauge-fill {
+    height: 100%;
+    border-radius: 5px;
+  }
+
+  .gauge-val { flex: 0 0 44px; font-size: 11px; font-weight: 700; color: #0a1628; text-align: right; }
+
+  .buffett-flag {
+    background: linear-gradient(90deg, #fff8e8, #fff);
+    border-left: 4px solid #c8a84b;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #444;
+    line-height: 1.7;
+    margin-top: 10px;
+  }
+
+  .buffett-flag strong { color: #0a1628; }
+</style>
+
+<div class="page section-page">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-header-text">
+      <div class="section-header-label">Financial Analysis</div>
+      <div class="section-header-title">财务状况分析 — 营收与利润结构</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+
+    <!-- Top KPIs -->
+    <div class="fin-row fin-row-4" style="margin-bottom:18px;">
+      <div style="background:#0a1628;border-radius:8px;padding:16px 18px;text-align:center;">
+        <div style="font-size:10px;letter-spacing:2px;color:#c8a84b;text-transform:uppercase;margin-bottom:6px;">FY2024 营收</div>
+        <div style="font-size:28px;font-weight:700;color:#fff;font-family:'Noto Serif SC',serif;">$25.1B</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:4px;">同比 +61.6%</div>
+      </div>
+      <div style="background:#f5f6f8;border-radius:8px;padding:16px 18px;text-align:center;border-top:3px solid #27ae60;">
+        <div style="font-size:10px;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:6px;">毛利率</div>
+        <div style="font-size:28px;font-weight:700;color:#0a1628;font-family:'Noto Serif SC',serif;">22.6%</div>
+        <div style="font-size:11px;color:#27ae60;margin-top:4px;">↑ 大幅回升（FY23: -9%）</div>
+      </div>
+      <div style="background:#f5f6f8;border-radius:8px;padding:16px 18px;text-align:center;border-top:3px solid #2980b9;">
+        <div style="font-size:10px;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:6px;">营业利润率</div>
+        <div style="font-size:28px;font-weight:700;color:#0a1628;font-family:'Noto Serif SC',serif;">4.8%</div>
+        <div style="font-size:11px;color:#2980b9;margin-top:4px;">FY25E: ~30%+</div>
+      </div>
+      <div style="background:#f5f6f8;border-radius:8px;padding:16px 18px;text-align:center;border-top:3px solid #c8a84b;">
+        <div style="font-size:10px;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:6px;">年度 Capex</div>
+        <div style="font-size:28px;font-weight:700;color:#0a1628;font-family:'Noto Serif SC',serif;">$8.4B</div>
+        <div style="font-size:11px;color:#c8a84b;margin-top:4px;">营收比 ~33%（重资产）</div>
+      </div>
+    </div>
+
+    <div class="fin-row fin-row-2">
+
+      <!-- Revenue Bar Chart -->
+      <div class="fin-panel">
+        <div class="fin-panel-header">
+          <span>历年营收趋势（$B）</span>
+          <em>FY2020–2024</em>
+        </div>
+        <div class="fin-panel-body">
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar-value">$21.4</div>
+              <div class="bar-rect" style="height:58%;background:linear-gradient(to top,#1a3a6e,#2a5aae);"></div>
+              <div class="bar-label">FY20</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-value">$27.7</div>
+              <div class="bar-rect" style="height:75%;background:linear-gradient(to top,#1a3a6e,#2a5aae);"></div>
+              <div class="bar-label">FY21</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-value">$30.8</div>
+              <div class="bar-rect" style="height:84%;background:linear-gradient(to top,#1a3a6e,#2a5aae);"></div>
+              <div class="bar-label">FY22</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-value">$15.5</div>
+              <div class="bar-rect" style="height:42%;background:linear-gradient(to top,#c0392b,#e74c3c);"></div>
+              <div class="bar-label">FY23</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-value">$25.1</div>
+              <div class="bar-rect" style="height:68%;background:linear-gradient(to top,#c8a84b,#e0c060);"></div>
+              <div class="bar-label">FY24</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-value">~$38E</div>
+              <div class="bar-rect" style="height:100%;background:linear-gradient(to top,#27ae60,#2ecc71);opacity:0.7;"></div>
+              <div class="bar-label">FY25E</div>
+            </div>
+          </div>
+          <div class="buffett-flag" style="margin-top:12px;">
+            <strong>巴菲特视角：</strong>营收在 3 年内从 $30.8B 暴跌至 $15.5B，再反弹至 $38B+，这种极端周期性令价值投资者难以建立确定性预期。
+          </div>
+        </div>
+      </div>
+
+      <!-- Margin Trend -->
+      <div class="fin-panel">
+        <div class="fin-panel-header">
+          <span>利润率结构分析</span>
+          <em>FY2022–2025E</em>
+        </div>
+        <div class="fin-panel-body">
+
+          <div style="margin-bottom:14px;">
+            <div style="font-size:10px;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:10px;">毛利率走势</div>
+            <div class="gauge-row">
+              <div class="gauge-label">FY2022（峰值）</div>
+              <div class="gauge-track"><div class="gauge-fill" style="width:47%;background:linear-gradient(90deg,#27ae60,#2ecc71);"></div></div>
+              <div class="gauge-val">47.4%</div>
+            </div>
+            <div class="gauge-row">
+              <div class="gauge-label">FY2023（谷底）</div>
+              <div class="gauge-track"><div class="gauge-fill" style="width:0%;background:#c0392b;"></div></div>
+              <div class="gauge-val" style="color:#c0392b;">-9.0%</div>
+            </div>
+            <div class="gauge-row">
+              <div class="gauge-label">FY2024（复苏）</div>
+              <div class="gauge-track"><div class="gauge-fill" style="width:22.6%;background:linear-gradient(90deg,#c8a84b,#e0c060);"></div></div>
+              <div class="gauge-val">22.6%</div>
+            </div>
+            <div class="gauge-row">
+              <div class="gauge-label">FY2025E（预期）</div>
+              <div class="gauge-track"><div class="gauge-fill" style="width:38%;background:linear-gradient(90deg,#2980b9,#3498db);opacity:0.8;"></div></div>
+              <div class="gauge-val" style="color:#2980b9;">~38%</div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid #f0f0f0;padding-top:12px;">
+            <div style="font-size:10px;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:10px;">FY2024 费用结构（占营收%）</div>
+            <div class="gauge-row">
+              <div class="gauge-label">研发支出</div>
+              <div class="gauge-track"><div class="gauge-fill" style="width:13.9%;background:#1a3a6e;"></div></div>
+              <div class="gauge-val">13.9%</div>
+            </div>
+            <div class="gauge-row">
+              <div class="gauge-label">销售管理费</div>
+              <div class="gauge-track"><div class="gauge-fill" style="width:4.0%;background:#2980b9;"></div></div>
+              <div class="gauge-val">4.0%</div>
+            </div>
+            <div class="gauge-row">
+              <div class="gauge-label">折旧摊销</div>
+              <div class="gauge-track"><div class="gauge-fill" style="width:25%;background:#c8a84b;"></div></div>
+              <div class="gauge-val">~25%</div>
+            </div>
+          </div>
+
+          <div class="buffett-flag">
+            <strong>关键观察：</strong>研发投入高达 $3.5B，是维持技术领先的必要成本，但也大幅压缩了经营利润。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Income Statement Summary Table -->
+    <div class="fin-panel">
+      <div class="fin-panel-header">
+        <span>简明利润表摘要（单位：$B）</span>
+        <em>FY2022–FY2025E</em>
+      </div>
+      <div class="fin-panel-body" style="padding:0;">
+        <table class="income-table">
+          <thead>
+            <tr>
+              <th style="width:200px;">项目</th>
+              <th>FY2022</th>
+              <th>FY2023</th>
+              <th>FY2024</th>
+              <th>FY2025E</th>
+              <th>YoY 变化</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>营业收入</td>
+              <td>$30.8</td>
+              <td>$15.5</td>
+              <td>$25.1</td>
+              <td>~$38.0</td>
+              <td class="badge-up">▲ +51%</td>
+            </tr>
+            <tr class="subtotal">
+              <td>毛利润</td>
+              <td>$14.6</td>
+              <td class="neg">$(1.4)</td>
+              <td>$5.7</td>
+              <td>~$14.4</td>
+              <td class="badge-up">▲ 大幅改善</td>
+            </tr>
+            <tr>
+              <td>研发费用</td>
+              <td>$(3.3)</td>
+              <td>$(3.0)</td>
+              <td>$(3.5)</td>
+              <td>~$(3.6)</td>
+              <td class="badge-flat">持平</td>
+            </tr>
+            <tr>
+              <td>经营利润（EBIT）</td>
+              <td>$8.7</td>
+              <td class="neg">$(5.8)</td>
+              <td>$1.2</td>
+              <td>~$10.0</td>
+              <td class="badge-up">▲ 强力反弹</td>
+            </tr>
+            <tr class="total">
+              <td>净利润</td>
+              <td>$8.7</td>
+              <td class="neg">$(5.8)</td>
+              <td>$0.8</td>
+              <td>~$8.5</td>
+              <td class="badge-up">▲ 复苏中</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>美光科技 — 投资分析报告 2025</span>
+    <span class="pf-gold">CONFIDENTIAL</span>
+    <span>PAGE 6</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ PAGE 7 — BALANCE SHEET & CASH FLOW ══════════════════════ -->
+<style>
+  .bs-card {
+    border-radius: 8px;
+    border: 1px solid #e4e4e4;
+    overflow: hidden;
+  }
+
+  .bs-card-header {
+    background: #0a1628;
+    padding: 10px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .bs-card-header span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .bs-card-header em {
+    font-size: 10px;
+    color: #c8a84b;
+    font-style: normal;
+  }
+
+  .bs-card-body { padding: 14px 18px; }
+
+  .bs-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid #f2f2f2;
+    font-size: 12.5px;
+  }
+
+  .bs-row:last-child { border-bottom: none; }
+  .bs-row .label { color: #555; }
+  .bs-row .val   { font-weight: 700; color: #0a1628; }
+  .bs-row .val.pos { color: #27ae60; }
+  .bs-row .val.neg { color: #c0392b; }
+
+  .bs-divider {
+    border: none;
+    border-top: 2px solid #0a1628;
+    margin: 6px 0;
+  }
+
+  .bs-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0a1628;
+  }
+
+  /* FCF waterfall */
+  .waterfall {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .wf-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .wf-label { flex: 0 0 160px; font-size: 12px; color: #555; }
+
+  .wf-bar-wrap {
+    flex: 1;
+    height: 20px;
+    background: #f5f5f5;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .wf-bar {
+    height: 100%;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .wf-val { flex: 0 0 56px; font-size: 12px; font-weight: 700; text-align: right; }
+
+  /* Health radar — simple table version */
+  .health-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .health-item {
+    background: #f5f6f8;
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .health-icon { font-size: 20px; flex-shrink: 0; }
+
+  .health-label { font-size: 11px; color: #666; margin-bottom: 2px; }
+  .health-val   { font-size: 14px; font-weight: 700; color: #0a1628; }
+  .health-note  { font-size: 10px; color: #aaa; }
+
+  .signal {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-left: 6px;
+  }
+
+  .signal-green  { background: #e8f4e8; color: #27ae60; }
+  .signal-yellow { background: #fff8e8; color: #c8a84b; }
+  .signal-red    { background: #fde8e8; color: #c0392b; }
+
+  .capex-note {
+    background: linear-gradient(135deg, #0a1628, #102d6e);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 14px;
+  }
+
+  .capex-note-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #c8a84b;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .capex-note-text {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.8;
+  }
+
+  .capex-note-text strong { color: #c8a84b; }
+</style>
+
+<div class="page section-page">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-header-text">
+      <div class="section-header-label">Financial Analysis</div>
+      <div class="section-header-title">财务状况分析 — 资产负债与现金流</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:20px;">
+
+      <!-- Balance Sheet -->
+      <div class="bs-card">
+        <div class="bs-card-header">
+          <span>资产负债表摘要</span>
+          <em>FY2024</em>
+        </div>
+        <div class="bs-card-body">
+          <div style="font-size:10px;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:8px;">流动资产</div>
+          <div class="bs-row"><span class="label">现金及等价物</span><span class="val pos">$9.2B</span></div>
+          <div class="bs-row"><span class="label">存货</span><span class="val">$8.4B</span></div>
+          <div class="bs-row"><span class="label">应收账款</span><span class="val">$3.3B</span></div>
+          <hr class="bs-divider">
+          <div style="font-size:10px;letter-spacing:2px;color:#888;text-transform:uppercase;margin:8px 0 8px;">负债</div>
+          <div class="bs-row"><span class="label">长期债务</span><span class="val neg">$13.2B</span></div>
+          <div class="bs-row"><span class="label">流动负债</span><span class="val neg">$6.8B</span></div>
+          <hr class="bs-divider">
+          <div class="bs-total">
+            <span>股东权益</span>
+            <span>$43.3B</span>
+          </div>
+          <div style="margin-top:8px;padding:6px 10px;background:#f5f6f8;border-radius:4px;font-size:11px;color:#555;">
+            净债务 / EBITDA ≈ 0.9x <span class="signal signal-green">健康</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FCF Waterfall -->
+      <div class="bs-card">
+        <div class="bs-card-header">
+          <span>自由现金流分析</span>
+          <em>FY2024</em>
+        </div>
+        <div class="bs-card-body">
+          <div class="waterfall">
+            <div class="wf-row">
+              <div class="wf-label">经营现金流</div>
+              <div class="wf-bar-wrap">
+                <div class="wf-bar" style="width:80%;background:linear-gradient(90deg,#0a1628,#1a3a6e);">+$8.5B</div>
+              </div>
+              <div class="wf-val" style="color:#0a1628;">+$8.5B</div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-label">资本开支 (Capex)</div>
+              <div class="wf-bar-wrap">
+                <div class="wf-bar" style="width:79%;background:linear-gradient(90deg,#c0392b,#e74c3c);">−$8.4B</div>
+              </div>
+              <div class="wf-val" style="color:#c0392b;">−$8.4B</div>
+            </div>
+            <div style="border-top:1px solid #e0e0e0;padding-top:8px;">
+              <div class="wf-row">
+                <div class="wf-label" style="font-weight:700;color:#0a1628;">自由现金流 (FCF)</div>
+                <div class="wf-bar-wrap">
+                  <div class="wf-bar" style="width:1%;background:#c8a84b;min-width:30px;">+$0.1B</div>
+                </div>
+                <div class="wf-val" style="color:#c8a84b;">+$0.1B</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;font-size:10px;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:8px;">历年 FCF 对比</div>
+          <div class="wf-row" style="margin-bottom:4px;">
+            <div class="wf-label" style="font-size:11px;color:#888;">FY2022</div>
+            <div class="wf-bar-wrap" style="height:14px;">
+              <div class="wf-bar" style="width:45%;background:#27ae60;font-size:9px;">+$3.8B</div>
+            </div>
+          </div>
+          <div class="wf-row" style="margin-bottom:4px;">
+            <div class="wf-label" style="font-size:11px;color:#888;">FY2023</div>
+            <div class="wf-bar-wrap" style="height:14px;">
+              <div class="wf-bar" style="width:60%;background:#c0392b;font-size:9px;">−$5.2B</div>
+            </div>
+          </div>
+          <div class="wf-row">
+            <div class="wf-label" style="font-size:11px;font-weight:700;">FY2024</div>
+            <div class="wf-bar-wrap" style="height:14px;">
+              <div class="wf-bar" style="width:5%;background:#c8a84b;font-size:9px;min-width:30px;">+$0.1B</div>
+            </div>
+          </div>
+          <div class="buffett-flag" style="margin-top:10px;font-size:11px;">
+            巴菲特最看重 FCF：<strong>Capex 几乎吃掉全部经营现金流</strong>，这正是他通常回避重资产制造业的根本原因。
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Ratios -->
+      <div class="bs-card">
+        <div class="bs-card-header">
+          <span>核心财务指标</span>
+          <em>巴菲特核查清单</em>
+        </div>
+        <div class="bs-card-body">
+          <div class="health-grid">
+            <div class="health-item">
+              <div class="health-icon">📈</div>
+              <div>
+                <div class="health-label">ROE（净资产回报）</div>
+                <div class="health-val">1.8% <span class="signal signal-red">偏低</span></div>
+                <div class="health-note">FY22 峰值 27%</div>
+              </div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">🔄</div>
+              <div>
+                <div class="health-label">ROIC</div>
+                <div class="health-val">~3% <span class="signal signal-red">偏低</span></div>
+                <div class="health-note">FY25E 预计改善</div>
+              </div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">💧</div>
+              <div>
+                <div class="health-label">流动比率</div>
+                <div class="health-val">2.3x <span class="signal signal-green">健康</span></div>
+                <div class="health-note">短期偿债无忧</div>
+              </div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">⚖️</div>
+              <div>
+                <div class="health-label">资产负债率</div>
+                <div class="health-val">38% <span class="signal signal-yellow">中等</span></div>
+                <div class="health-note">行业平均水平</div>
+              </div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">📊</div>
+              <div>
+                <div class="health-label">P/B 市净率</div>
+                <div class="health-val">2.1x <span class="signal signal-green">合理</span></div>
+                <div class="health-note">历史低位区间</div>
+              </div>
+            </div>
+            <div class="health-item">
+              <div class="health-icon">🏗️</div>
+              <div>
+                <div class="health-label">Capex / 营收</div>
+                <div class="health-val">33% <span class="signal signal-red">极重</span></div>
+                <div class="health-note">巴菲特高度警惕</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Capex Note -->
+    <div class="capex-note">
+      <div class="capex-note-label">巴菲特核心警示 — 资本密集度</div>
+      <div class="capex-note-text">
+        "真正优秀的生意不需要大量资本就能持续成长。" 美光每年需投入 <strong>$8-9B 的资本开支</strong>仅仅是为了维持竞争力，而非扩张。CHIPS Act 的 $6.1B 补贴固然重要，但美光未来 5 年的计划总投资高达 <strong>$1250 亿美元</strong>，这意味着大量股权稀释或债务融资将持续考验股东回报。巴菲特会问：<strong>"这家公司能否在不需要持续大额再投入的情况下产生可靠的现金流？"</strong> 目前答案仍是存疑的。
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>美光科技 — 投资分析报告 2025</span>
+    <span class="pf-gold">CONFIDENTIAL</span>
+    <span>PAGE 7</span>
+  </div>
+</div>
+
 </body>
 </html>

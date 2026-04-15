@@ -894,5 +894,754 @@
   </div>
 </div>
 
+
+<!-- ══════════════════════ PAGE 4 — BUSINESS MODEL ══════════════════════ -->
+<style>
+  /* ── BUSINESS MODEL STYLES ── */
+  .bm-intro {
+    background: #f5f6f8;
+    border-radius: 8px;
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    border-left: 4px solid #0a1628;
+    font-size: 13.5px;
+    color: #333;
+    line-height: 1.85;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .bm-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .product-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+  }
+
+  .product-card-header {
+    padding: 14px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-card-header.dram  { background: #0a1628; }
+  .product-card-header.nand  { background: #1a3a6e; }
+  .product-card-header.other { background: #c8a84b; color: #0a1628; }
+
+  .product-card-share {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .product-card-body {
+    padding: 14px 18px;
+    background: #fff;
+  }
+
+  .product-card-body ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .product-card-body li {
+    font-size: 12px;
+    color: #555;
+    padding-left: 12px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .product-card-body li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: #c8a84b;
+    font-weight: 700;
+  }
+
+  .product-card-body .tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  .tag-ai    { background: #e8f4e8; color: #27ae60; }
+  .tag-growth{ background: #e8f0ff; color: #2980b9; }
+  .tag-stable{ background: #fff8e8; color: #c8a84b; }
+
+  /* Revenue by end-market */
+  .market-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0a1628;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .market-section-title::before {
+    content: '';
+    width: 14px; height: 3px;
+    background: #c8a84b;
+    display: inline-block;
+  }
+
+  .market-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .market-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .market-name {
+    flex: 0 0 90px;
+    font-size: 12px;
+    color: #444;
+    font-weight: 500;
+  }
+
+  .market-bar-wrap {
+    flex: 1;
+    height: 22px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .market-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+  }
+
+  .market-bar-fill span {
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+
+  .market-pct {
+    flex: 0 0 36px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0a1628;
+    text-align: right;
+  }
+
+  .market-trend {
+    flex: 0 0 64px;
+    font-size: 11px;
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .trend-up   { color: #27ae60; }
+  .trend-down { color: #c0392b; }
+  .trend-flat { color: #888; }
+
+  .value-chain {
+    display: flex;
+    gap: 0;
+    margin-top: 24px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+  }
+
+  .vc-step {
+    flex: 1;
+    padding: 14px 16px;
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
+    position: relative;
+  }
+
+  .vc-step:last-child { border-right: none; }
+
+  .vc-step::after {
+    content: '▶';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #c8a84b;
+    font-size: 12px;
+    z-index: 1;
+  }
+
+  .vc-step:last-child::after { display: none; }
+
+  .vc-step-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0a1628;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .vc-step-desc {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .vc-step-highlight {
+    font-size: 10px;
+    font-weight: 700;
+    color: #c8a84b;
+    margin-top: 4px;
+  }
+</style>
+
+<div class="page section-page">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-header-text">
+      <div class="section-header-label">Business Model Analysis</div>
+      <div class="section-header-title">商业模式分析 — 产品结构与收入来源</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+
+    <div class="bm-intro">
+      美光是<strong>全球前三的存储芯片制造商</strong>，同时掌握 DRAM 与 NAND 两条核心产品线，这在全球仅有三家公司能够做到（另两家为三星和 SK 海力士）。巴菲特青睐"能用一句话解释的生意"——美光的商业模式可以简述为：<strong>制造并销售计算机和电子设备所需的"记忆力"芯片</strong>。
+    </div>
+
+    <!-- Product Cards -->
+    <div class="bm-grid">
+      <div class="product-card">
+        <div class="product-card-header dram">
+          <span>DRAM 动态内存</span>
+          <span class="product-card-share">~69%</span>
+        </div>
+        <div class="product-card-body">
+          <ul>
+            <li>服务器 / 数据中心内存</li>
+            <li>PC 与笔记本内存</li>
+            <li>HBM（高带宽内存）AI 专属</li>
+            <li>移动端 LPDDR 系列</li>
+          </ul>
+          <span class="tag tag-ai">AI 核心驱动</span>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-card-header nand">
+          <span>NAND 闪存</span>
+          <span class="product-card-share">~26%</span>
+        </div>
+        <div class="product-card-body">
+          <ul>
+            <li>SSD 固态硬盘（企业级/消费级）</li>
+            <li>eMMC / UFS 移动存储</li>
+            <li>数据中心存储解决方案</li>
+            <li>汽车级闪存</li>
+          </ul>
+          <span class="tag tag-growth">结构增长</span>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-card-header other">
+          <span>NOR 及其他</span>
+          <span class="product-card-share">~5%</span>
+        </div>
+        <div class="product-card-body">
+          <ul>
+            <li>NOR Flash 工业/汽车</li>
+            <li>嵌入式存储模块</li>
+            <li>定制化存储解决方案</li>
+            <li>高可靠性特种市场</li>
+          </ul>
+          <span class="tag tag-stable">稳定细分</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Market + Value Chain -->
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 28px;">
+      <div>
+        <div class="market-section-title">终端市场营收占比（FY2024 估算）</div>
+        <div class="market-bars">
+          <div class="market-row">
+            <div class="market-name">数据中心</div>
+            <div class="market-bar-wrap">
+              <div class="market-bar-fill" style="width:50%;background:linear-gradient(90deg,#0a1628,#1a3a6e);">
+                <span>Data Center</span>
+              </div>
+            </div>
+            <div class="market-pct">50%</div>
+            <div class="market-trend trend-up">↑ 高速增长</div>
+          </div>
+          <div class="market-row">
+            <div class="market-name">移动端</div>
+            <div class="market-bar-wrap">
+              <div class="market-bar-fill" style="width:24%;background:linear-gradient(90deg,#2980b9,#3498db);">
+                <span>Mobile</span>
+              </div>
+            </div>
+            <div class="market-pct">24%</div>
+            <div class="market-trend trend-flat">→ 温和回升</div>
+          </div>
+          <div class="market-row">
+            <div class="market-name">PC / 消费</div>
+            <div class="market-bar-wrap">
+              <div class="market-bar-fill" style="width:16%;background:linear-gradient(90deg,#c8a84b,#e0b84b);">
+                <span style="color:#0a1628">PC</span>
+              </div>
+            </div>
+            <div class="market-pct">16%</div>
+            <div class="market-trend trend-flat">→ 平稳</div>
+          </div>
+          <div class="market-row">
+            <div class="market-name">汽车 / 工业</div>
+            <div class="market-bar-wrap">
+              <div class="market-bar-fill" style="width:10%;background:linear-gradient(90deg,#27ae60,#2ecc71);">
+                <span>Auto</span>
+              </div>
+            </div>
+            <div class="market-pct">10%</div>
+            <div class="market-trend trend-up">↑ 长期增长</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="market-section-title">巴菲特视角：商业模式评分</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="background:#f5f6f8;border-radius:6px;padding:12px 16px;">
+            <div style="font-size:11px;font-weight:700;color:#27ae60;margin-bottom:4px;">✔ 优势</div>
+            <div style="font-size:12px;color:#444;line-height:1.7;">三巨头寡头市场，客户转换成本高；两条产品线互补，覆盖计算全场景；AI 驱动的 HBM 产品毛利率显著高于普通 DRAM</div>
+          </div>
+          <div style="background:#f5f6f8;border-radius:6px;padding:12px 16px;">
+            <div style="font-size:11px;font-weight:700;color:#c0392b;margin-bottom:4px;">✖ 劣势</div>
+            <div style="font-size:12px;color:#444;line-height:1.7;">产品本质上仍是商品定价；无法单方面控制价格；技术代际更替风险高；与三星/海力士差距仍在</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Value Chain -->
+    <div class="value-chain">
+      <div class="vc-step">
+        <div class="vc-step-title">研发设计</div>
+        <div class="vc-step-desc">1nm DRAM 路线图 HBM3E 开发</div>
+        <div class="vc-step-highlight">年研发投入 ~$3.5B</div>
+      </div>
+      <div class="vc-step">
+        <div class="vc-step-title">晶圆制造</div>
+        <div class="vc-step-desc">爱达荷/弗吉尼亚 美国本土 Fab</div>
+        <div class="vc-step-highlight">CHIPS Act 补贴保障</div>
+      </div>
+      <div class="vc-step">
+        <div class="vc-step-title">封装测试</div>
+        <div class="vc-step-desc">先进封装 HBM 堆叠技术</div>
+        <div class="vc-step-highlight">差异化竞争关键</div>
+      </div>
+      <div class="vc-step">
+        <div class="vc-step-title">销售交付</div>
+        <div class="vc-step-desc">直销大客户 + 分销网络</div>
+        <div class="vc-step-highlight">英伟达/谷歌 战略客户</div>
+      </div>
+      <div class="vc-step">
+        <div class="vc-step-title">售后服务</div>
+        <div class="vc-step-desc">定制方案 技术支持</div>
+        <div class="vc-step-highlight">粘性提升中</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>美光科技 — 投资分析报告 2025</span>
+    <span class="pf-gold">CONFIDENTIAL</span>
+    <span>PAGE 4</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ PAGE 5 — MOAT ANALYSIS ══════════════════════ -->
+<style>
+  .moat-section { margin-bottom: 26px; }
+
+  .moat-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0a1628;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0a1628;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .moat-title::before {
+    content: '';
+    width: 14px; height: 3px;
+    background: #c8a84b;
+    display: inline-block;
+  }
+
+  .moat-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .moat-card {
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+  }
+
+  .moat-card-top {
+    padding: 14px 16px 10px;
+    background: #fff;
+  }
+
+  .moat-card-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .moat-card-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0a1628;
+    margin-bottom: 4px;
+  }
+
+  .moat-card-desc {
+    font-size: 11.5px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  .moat-card-bottom {
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .moat-card-bottom.strong { background: #e8f4e8; }
+  .moat-card-bottom.medium { background: #fff8e8; }
+  .moat-card-bottom.weak   { background: #fde8e8; }
+
+  .moat-strength-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .moat-strength-label.strong { color: #27ae60; }
+  .moat-strength-label.medium { color: #c8a84b; }
+  .moat-strength-label.weak   { color: #c0392b; }
+
+  .moat-score-dots {
+    display: flex;
+    gap: 3px;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  .dot.filled.strong { background: #27ae60; }
+  .dot.filled.medium { background: #c8a84b; }
+  .dot.filled.weak   { background: #c0392b; }
+  .dot.empty  { background: #ddd; }
+
+  /* HBM Highlight */
+  .hbm-highlight {
+    background: linear-gradient(135deg, #0a1628 0%, #102d6e 100%);
+    border-radius: 10px;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 22px;
+  }
+
+  .hbm-left {}
+
+  .hbm-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #c8a84b;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .hbm-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Noto Serif SC', serif;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .hbm-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.8;
+  }
+
+  .hbm-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .hbm-stat {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+
+  .hbm-stat-val {
+    font-size: 22px;
+    font-weight: 700;
+    color: #c8a84b;
+    font-family: 'Noto Serif SC', serif;
+    flex: 0 0 70px;
+  }
+
+  .hbm-stat-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+  }
+
+  /* Oligopoly chart */
+  .oligopoly-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .oligo-name {
+    flex: 0 0 80px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .oligo-bar-wrap {
+    flex: 1;
+    height: 28px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .oligo-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 4px;
+  }
+
+  .oligo-pct {
+    flex: 0 0 42px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0a1628;
+    text-align: right;
+  }
+</style>
+
+<div class="page section-page">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-header-text">
+      <div class="section-header-label">Business Model — Competitive Moat</div>
+      <div class="section-header-title">商业模式分析 — 护城河深度评估</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+
+    <!-- HBM Highlight Box -->
+    <div class="hbm-highlight">
+      <div class="hbm-left">
+        <div class="hbm-label">战略制高点 · AI 时代新护城河</div>
+        <div class="hbm-title">HBM 高带宽内存<br>重塑美光的竞争地位</div>
+        <div class="hbm-desc">
+          HBM 是为 AI GPU（如英伟达 H100/B200）专门设计的高端 DRAM，其单位价值约为普通 DRAM 的 <strong style="color:#c8a84b;">5-8 倍</strong>，且全球仅三家供应商具备量产能力。美光是英伟达 Blackwell 平台的 HBM3E 认证供应商，这标志着其从"商品供应商"向"战略合作伙伴"的跃升。
+        </div>
+      </div>
+      <div class="hbm-stats">
+        <div class="hbm-stat">
+          <div class="hbm-stat-val">5-8x</div>
+          <div class="hbm-stat-desc">HBM vs 普通 DRAM 单价溢价倍数</div>
+        </div>
+        <div class="hbm-stat">
+          <div class="hbm-stat-val">$30B+</div>
+          <div class="hbm-stat-desc">2025E 全球 HBM 市场规模</div>
+        </div>
+        <div class="hbm-stat">
+          <div class="hbm-stat-val">~20%</div>
+          <div class="hbm-stat-desc">美光 HBM 市占率（追赶中）</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Moat Cards + Oligopoly -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:22px;">
+
+      <!-- Moat Cards Left -->
+      <div>
+        <div class="moat-title">六大护城河维度</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f5f6f8;border-radius:6px;">
+            <div style="font-size:18px;flex-shrink:0;">🏭</div>
+            <div style="flex:1;">
+              <div style="font-size:12px;font-weight:700;color:#0a1628;margin-bottom:2px;">规模壁垒 · 强</div>
+              <div style="font-size:11px;color:#666;">建一座先进内存 Fab 需 $150-200亿，新进入者几乎不可能</div>
+            </div>
+            <div style="display:flex;gap:2px;">
+              <div class="dot filled strong"></div><div class="dot filled strong"></div><div class="dot filled strong"></div><div class="dot filled strong"></div><div class="dot empty"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f5f6f8;border-radius:6px;">
+            <div style="font-size:18px;flex-shrink:0;">🔬</div>
+            <div style="flex:1;">
+              <div style="font-size:12px;font-weight:700;color:#0a1628;margin-bottom:2px;">技术积累 · 中强</div>
+              <div style="font-size:11px;color:#666;">数十年制程工艺专利，HBM 封装技术独特</div>
+            </div>
+            <div style="display:flex;gap:2px;">
+              <div class="dot filled medium"></div><div class="dot filled medium"></div><div class="dot filled medium"></div><div class="dot empty"></div><div class="dot empty"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f5f6f8;border-radius:6px;">
+            <div style="font-size:18px;flex-shrink:0;">🤝</div>
+            <div style="flex:1;">
+              <div style="font-size:12px;font-weight:700;color:#0a1628;margin-bottom:2px;">客户粘性 · 中</div>
+              <div style="font-size:11px;color:#666;">HBM 客户认证周期长，切换成本高</div>
+            </div>
+            <div style="display:flex;gap:2px;">
+              <div class="dot filled medium"></div><div class="dot filled medium"></div><div class="dot filled medium"></div><div class="dot empty"></div><div class="dot empty"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f5f6f8;border-radius:6px;">
+            <div style="font-size:18px;flex-shrink:0;">💰</div>
+            <div style="flex:1;">
+              <div style="font-size:12px;font-weight:700;color:#0a1628;margin-bottom:2px;">定价权 · 弱</div>
+              <div style="font-size:11px;color:#666;">普通 DRAM/NAND 仍受供需周期左右</div>
+            </div>
+            <div style="display:flex;gap:2px;">
+              <div class="dot filled weak"></div><div class="dot empty"></div><div class="dot empty"></div><div class="dot empty"></div><div class="dot empty"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Oligopoly Right -->
+      <div>
+        <div class="moat-title">DRAM 全球寡头格局（2024）</div>
+        <div style="margin-bottom:6px;">
+          <div class="oligopoly-row">
+            <div class="oligo-name">三星</div>
+            <div class="oligo-bar-wrap">
+              <div class="oligo-bar" style="width:43%;background:linear-gradient(90deg,#1a3a6e,#2a5aae);">三星 Samsung</div>
+            </div>
+            <div class="oligo-pct">43%</div>
+          </div>
+          <div class="oligopoly-row">
+            <div class="oligo-name">SK 海力士</div>
+            <div class="oligo-bar-wrap">
+              <div class="oligo-bar" style="width:34%;background:linear-gradient(90deg,#2980b9,#3498db);">SK Hynix</div>
+            </div>
+            <div class="oligo-pct">34%</div>
+          </div>
+          <div class="oligopoly-row">
+            <div class="oligo-name" style="color:#c8a84b;font-weight:700;">美光</div>
+            <div class="oligo-bar-wrap">
+              <div class="oligo-bar" style="width:23%;background:linear-gradient(90deg,#c8a84b,#e0c060);">
+                <span style="color:#0a1628;">Micron</span>
+              </div>
+            </div>
+            <div class="oligo-pct" style="color:#c8a84b;font-weight:700;">23%</div>
+          </div>
+          <div class="oligopoly-row">
+            <div class="oligo-name" style="color:#aaa;">其他</div>
+            <div class="oligo-bar-wrap">
+              <div class="oligo-bar" style="width:0%;background:#ddd;"></div>
+            </div>
+            <div class="oligo-pct" style="color:#aaa;">≈0%</div>
+          </div>
+        </div>
+
+        <div style="background:#0a1628;border-radius:6px;padding:14px 16px;margin-top:12px;">
+          <div style="font-size:10px;letter-spacing:2px;color:#c8a84b;text-transform:uppercase;margin-bottom:6px;">巴菲特点评</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.72);line-height:1.8;">
+            "三家公司瓜分整个市场，这是我喜欢的格局。但他们生产的是商品，价格由市场决定，而不是他们自己——这不是可口可乐。"
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>美光科技 — 投资分析报告 2025</span>
+    <span class="pf-gold">CONFIDENTIAL</span>
+    <span>PAGE 5</span>
+  </div>
+</div>
+
 </body>
 </html>

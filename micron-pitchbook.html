@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美光科技 — 投资分析报告</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #f0f0f0;
+    color: #1a1a2e;
+  }
+
+  /* ── PAGE BASE ── */
+  .page {
+    width: 1100px;
+    min-height: 700px;
+    margin: 36px auto;
+    background: #fff;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  /* ══════════════════════════════════════
+     PAGE 1 — COVER
+  ══════════════════════════════════════ */
+  .cover {
+    background: linear-gradient(135deg, #0a1628 0%, #0d2550 55%, #102d6e 100%);
+    display: flex;
+    flex-direction: column;
+    min-height: 700px;
+  }
+
+  .cover-top-bar {
+    background: #c8a84b;
+    height: 6px;
+    width: 100%;
+  }
+
+  .cover-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px 40px;
+    position: relative;
+  }
+
+  /* Decorative geometric lines */
+  .cover-body::before {
+    content: '';
+    position: absolute;
+    right: 0; top: 0;
+    width: 340px; height: 100%;
+    background: linear-gradient(135deg, transparent 40%, rgba(200,168,75,0.07) 100%);
+    pointer-events: none;
+  }
+  .cover-body::after {
+    content: '';
+    position: absolute;
+    right: 80px; top: 60px;
+    width: 1px; height: 78%;
+    background: linear-gradient(to bottom, transparent, rgba(200,168,75,0.4), transparent);
+  }
+
+  .cover-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    color: #c8a84b;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  .cover-company {
+    font-size: 58px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .cover-company span {
+    color: #c8a84b;
+  }
+
+  .cover-ticker {
+    font-size: 20px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 6px;
+    margin-top: 10px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  .cover-divider {
+    width: 64px;
+    height: 3px;
+    background: #c8a84b;
+    margin: 32px 0;
+  }
+
+  .cover-subtitle {
+    font-size: 20px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 520px;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .cover-subtitle em {
+    color: #c8a84b;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    margin-top: 60px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .cover-meta-item label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .cover-meta-item span {
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+  }
+
+  .cover-bottom {
+    padding: 18px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .cover-bottom-left {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+  }
+
+  .cover-bottom-right {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+  }
+
+  .cover-badge {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 160px;
+    height: 160px;
+    border: 1.5px solid rgba(200,168,75,0.35);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .cover-badge::before {
+    content: '';
+    position: absolute;
+    width: 142px; height: 142px;
+    border: 1px solid rgba(200,168,75,0.18);
+    border-radius: 50%;
+  }
+
+  .cover-badge-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(200,168,75,0.6);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .cover-badge-ticker {
+    font-size: 26px;
+    font-weight: 700;
+    color: #c8a84b;
+    letter-spacing: 2px;
+  }
+
+  .cover-badge-exchange {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* ══════════════════════════════════════
+     PAGE 2 — TABLE OF CONTENTS
+  ══════════════════════════════════════ */
+  .toc-page {
+    display: flex;
+    min-height: 700px;
+  }
+
+  .toc-sidebar {
+    width: 280px;
+    background: linear-gradient(180deg, #0a1628 0%, #0d2550 100%);
+    padding: 56px 36px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .toc-sidebar-accent {
+    width: 36px;
+    height: 3px;
+    background: #c8a84b;
+    margin-bottom: 24px;
+  }
+
+  .toc-sidebar-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .toc-sidebar-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.3;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .toc-sidebar-title span {
+    color: #c8a84b;
+  }
+
+  .toc-sidebar-quote {
+    margin-top: auto;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .toc-sidebar-quote p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  .toc-sidebar-quote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 11px;
+    color: #c8a84b;
+    font-style: normal;
+    letter-spacing: 1px;
+  }
+
+  .toc-content {
+    flex: 1;
+    padding: 56px 64px;
+  }
+
+  .toc-header {
+    margin-bottom: 44px;
+  }
+
+  .toc-header-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #c8a84b;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .toc-header-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0a1628;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .toc-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid #e8e8e8;
+    cursor: default;
+    transition: background 0.2s;
+  }
+
+  .toc-item:hover {
+    background: #f8f6f0;
+    padding-left: 8px;
+  }
+
+  .toc-num {
+    width: 40px;
+    height: 40px;
+    background: #0a1628;
+    color: #c8a84b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-right: 24px;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .toc-item-body {
+    flex: 1;
+  }
+
+  .toc-item-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 3px;
+  }
+
+  .toc-item-sub {
+    font-size: 12px;
+    color: #888;
+    font-weight: 300;
+  }
+
+  .toc-item-tag {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #c8a84b;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .toc-item:first-child { border-top: 1px solid #e8e8e8; }
+
+  /* ── PAGE FOOTER ── */
+  .page-footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40px;
+    background: #0a1628;
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+    justify-content: space-between;
+  }
+
+  .page-footer span {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .page-footer .pf-gold { color: #c8a84b; }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; box-shadow: none; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ PAGE 1 — COVER ══════════════════════ -->
+<div class="page cover">
+  <div class="cover-top-bar"></div>
+  <div class="cover-body">
+
+    <div class="cover-tag">投资分析报告 &nbsp;|&nbsp; 股票研究</div>
+
+    <div class="cover-company">美光<span>科技</span></div>
+    <div class="cover-ticker">MICRON TECHNOLOGY &nbsp;·&nbsp; NASDAQ: MU</div>
+
+    <div class="cover-divider"></div>
+
+    <div class="cover-subtitle">
+      以<em>巴菲特视角</em>审视美光科技<br>
+      商业模式 · 财务基础 · 管理文化 · 护城河
+    </div>
+
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <label>报告日期</label>
+        <span>2025 年 4 月</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>报告性质</label>
+        <span>深度投资分析</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>分析框架</label>
+        <span>价值投资 · 巴菲特方法论</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>行业分类</label>
+        <span>半导体 · 存储器</span>
+      </div>
+    </div>
+
+    <div class="cover-badge">
+      <div class="cover-badge-label">标的代码</div>
+      <div class="cover-badge-ticker">MU</div>
+      <div class="cover-badge-exchange">NASDAQ</div>
+    </div>
+
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-bottom-left">CONFIDENTIAL &nbsp;·&nbsp; FOR INTERNAL USE ONLY</div>
+    <div class="cover-bottom-right">© 2025 &nbsp;·&nbsp; 深度研究部</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ PAGE 2 — TABLE OF CONTENTS ══════════════════════ -->
+<div class="page toc-page">
+  <div class="toc-sidebar">
+    <div class="toc-sidebar-accent"></div>
+    <div class="toc-sidebar-label">报告导航</div>
+    <div class="toc-sidebar-title">目录<br><span>Contents</span></div>
+
+    <div class="toc-sidebar-quote">
+      <p>
+        "如果不愿意持有一只股票十年，<br>
+        就不要考虑持有它十分钟。"
+      </p>
+      <cite>— 沃伦·巴菲特</cite>
+    </div>
+  </div>
+
+  <div class="toc-content">
+    <div class="toc-header">
+      <div class="toc-header-label">Table of Contents</div>
+      <div class="toc-header-title">报告结构总览</div>
+    </div>
+
+    <div class="toc-items">
+
+      <div class="toc-item">
+        <div class="toc-num">01</div>
+        <div class="toc-item-body">
+          <div class="toc-item-title">投资亮点摘要</div>
+          <div class="toc-item-sub">核心论点 · 关键数据 · 巴菲特评分卡</div>
+        </div>
+        <div class="toc-item-tag">Executive Summary</div>
+      </div>
+
+      <div class="toc-item">
+        <div class="toc-num">02</div>
+        <div class="toc-item-body">
+          <div class="toc-item-title">商业模式分析</div>
+          <div class="toc-item-sub">产品结构 · 收入来源 · 护城河评估</div>
+        </div>
+        <div class="toc-item-tag">Business Model</div>
+      </div>
+
+      <div class="toc-item">
+        <div class="toc-num">03</div>
+        <div class="toc-item-body">
+          <div class="toc-item-title">财务状况分析</div>
+          <div class="toc-item-sub">收入趋势 · 利润率 · 资产负债 · 自由现金流</div>
+        </div>
+        <div class="toc-item-tag">Financial Analysis</div>
+      </div>
+
+      <div class="toc-item">
+        <div class="toc-num">04</div>
+        <div class="toc-item-body">
+          <div class="toc-item-title">公司文化与管理层</div>
+          <div class="toc-item-sub">CEO 画像 · 资本配置 · 文化基因 · 诚信标准</div>
+        </div>
+        <div class="toc-item-tag">Culture & Management</div>
+      </div>
+
+      <div class="toc-item">
+        <div class="toc-num">05</div>
+        <div class="toc-item-body">
+          <div class="toc-item-title">行业格局与 AI 机遇</div>
+          <div class="toc-item-sub">寡头市场 · HBM 赛道 · 结构性需求</div>
+        </div>
+        <div class="toc-item-tag">Industry & AI</div>
+      </div>
+
+      <div class="toc-item">
+        <div class="toc-num">06</div>
+        <div class="toc-item-body">
+          <div class="toc-item-title">估值与投资建议</div>
+          <div class="toc-item-sub">多维估值 · 安全边际 · 巴菲特最终裁定</div>
+        </div>
+        <div class="toc-item-tag">Valuation & Verdict</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>美光科技 — 投资分析报告 2025</span>
+    <span class="pf-gold">CONFIDENTIAL</span>
+    <span>PAGE 2</span>
+  </div>
+</div>
+
+</body>
+</html>

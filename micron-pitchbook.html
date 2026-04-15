@@ -532,5 +532,367 @@
   </div>
 </div>
 
+
+<!-- ══════════════════════ PAGE 3 — EXECUTIVE SUMMARY ══════════════════════ -->
+<style>
+  /* ── SHARED SECTION STYLES ── */
+  .section-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 700px;
+    padding-bottom: 40px;
+  }
+
+  .section-header {
+    background: linear-gradient(90deg, #0a1628 0%, #0d2550 100%);
+    padding: 28px 56px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .section-num {
+    width: 44px;
+    height: 44px;
+    border: 2px solid #c8a84b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c8a84b;
+    font-size: 15px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .section-header-text {}
+  .section-header-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .section-header-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .section-body {
+    flex: 1;
+    padding: 36px 56px 20px;
+  }
+
+  /* ── EXEC SUMMARY STYLES ── */
+  .exec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  .exec-thesis {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #f8f6f0, #fff8e8);
+    border-left: 4px solid #c8a84b;
+    padding: 22px 28px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .exec-thesis-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #c8a84b;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .exec-thesis-text {
+    font-size: 15px;
+    color: #1a1a2e;
+    line-height: 1.9;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .kpi-card {
+    background: #f5f6f8;
+    border-radius: 8px;
+    padding: 18px 16px;
+    text-align: center;
+    border-top: 3px solid #0a1628;
+  }
+
+  .kpi-card.gold { border-top-color: #c8a84b; }
+  .kpi-card.red  { border-top-color: #c0392b; }
+  .kpi-card.green{ border-top-color: #27ae60; }
+
+  .kpi-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .kpi-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0a1628;
+    font-family: 'Noto Serif SC', serif;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .kpi-sub {
+    font-size: 11px;
+    color: #aaa;
+  }
+
+  /* ── BUFFETT SCORECARD ── */
+  .scorecard-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0a1628;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0a1628;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .scorecard-title::before {
+    content: '';
+    width: 16px;
+    height: 3px;
+    background: #c8a84b;
+    display: inline-block;
+  }
+
+  .scorecard-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .sc-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 16px;
+  }
+
+  .sc-criterion {
+    flex: 0 0 180px;
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+  }
+
+  .sc-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: #e8e8e8;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .sc-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s;
+  }
+
+  .sc-bar.excellent { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+  .sc-bar.good      { background: linear-gradient(90deg, #2980b9, #3498db); }
+  .sc-bar.mixed     { background: linear-gradient(90deg, #c8a84b, #f1c40f); }
+  .sc-bar.weak      { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+
+  .sc-rating {
+    flex: 0 0 60px;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .sc-rating.excellent { color: #27ae60; }
+  .sc-rating.good      { color: #2980b9; }
+  .sc-rating.mixed     { color: #c8a84b; }
+  .sc-rating.weak      { color: #c0392b; }
+
+  .sc-note {
+    flex: 0 0 200px;
+    font-size: 11px;
+    color: #888;
+    text-align: right;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .verdict-box {
+    background: #0a1628;
+    border-radius: 8px;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .verdict-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #c8a84b;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .verdict-stars {
+    font-size: 22px;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+  }
+
+  .verdict-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.8;
+  }
+
+  .verdict-text strong {
+    color: #c8a84b;
+  }
+</style>
+
+<div class="page section-page">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-header-text">
+      <div class="section-header-label">Executive Summary</div>
+      <div class="section-header-title">投资亮点摘要</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+
+    <!-- Core Thesis -->
+    <div class="exec-thesis" style="margin-bottom:24px;">
+      <div class="exec-thesis-label">核心投资论点</div>
+      <div class="exec-thesis-text">
+        美光科技是全球三大存储芯片制造商之一，凭借 <strong>DRAM 寡头格局</strong>与 <strong>HBM（高带宽存储）</strong>的 AI 时代战略卡位，正从周期性商品制造商向<strong>高价值差异化平台</strong>转型。以巴菲特框架审视，美光兼具"可理解的商业模式"与"改善中的护城河"，但其高资本密集度与周期性仍是关键考量。
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card gold">
+        <div class="kpi-label">FY2024 营收</div>
+        <div class="kpi-value">$25.1B</div>
+        <div class="kpi-sub">同比 +61.6%</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">毛利率</div>
+        <div class="kpi-value">22.6%</div>
+        <div class="kpi-sub">同比大幅回升</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">HBM 市占率</div>
+        <div class="kpi-value">~20%</div>
+        <div class="kpi-sub">全球第3，追赶中</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">CHIPS Act 补贴</div>
+        <div class="kpi-value">$6.1B</div>
+        <div class="kpi-sub">美国政府战略扶持</div>
+      </div>
+    </div>
+
+    <!-- Scorecard + Verdict -->
+    <div class="two-col">
+      <div>
+        <div class="scorecard-title">巴菲特评分卡</div>
+        <div class="scorecard-rows">
+          <div class="sc-row">
+            <div class="sc-criterion">可理解的商业模式</div>
+            <div class="sc-bar-wrap"><div class="sc-bar good" style="width:72%"></div></div>
+            <div class="sc-rating good">B+</div>
+            <div class="sc-note">存储芯片逻辑清晰</div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-criterion">持久竞争护城河</div>
+            <div class="sc-bar-wrap"><div class="sc-bar mixed" style="width:52%"></div></div>
+            <div class="sc-rating mixed">C+</div>
+            <div class="sc-note">寡头但非定价权</div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-criterion">财务健康与盈利</div>
+            <div class="sc-bar-wrap"><div class="sc-bar mixed" style="width:55%"></div></div>
+            <div class="sc-rating mixed">C+</div>
+            <div class="sc-note">周期性大幅波动</div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-criterion">管理层诚信与能力</div>
+            <div class="sc-bar-wrap"><div class="sc-bar good" style="width:78%"></div></div>
+            <div class="sc-rating good">A-</div>
+            <div class="sc-note">Mehrotra 口碑良好</div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-criterion">合理估值/安全边际</div>
+            <div class="sc-bar-wrap"><div class="sc-bar good" style="width:70%"></div></div>
+            <div class="sc-rating good">B</div>
+            <div class="sc-note">周期底部具吸引力</div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-criterion">长期增长可预测性</div>
+            <div class="sc-bar-wrap"><div class="sc-bar weak" style="width:38%"></div></div>
+            <div class="sc-rating weak">D+</div>
+            <div class="sc-note">周期波动难预测</div>
+          </div>
+          <div class="sc-row">
+            <div class="sc-criterion">资本回报效率</div>
+            <div class="sc-bar-wrap"><div class="sc-bar mixed" style="width:48%"></div></div>
+            <div class="sc-rating mixed">C</div>
+            <div class="sc-note">Capex 极重，ROIC 偏低</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="verdict-box">
+        <div class="verdict-label">巴菲特综合裁定</div>
+        <div class="verdict-stars">★★★☆☆</div>
+        <div class="verdict-text">
+          美光具备<strong>可理解的业务</strong>与<strong>优秀的管理团队</strong>，HBM 赛道提供了真实的结构性机遇。<br><br>
+          然而，其高度<strong>资本密集</strong>的属性、<strong>周期性剧烈波动</strong>的历史，以及存储价格的商品化特性，与巴菲特偏好"可预测、轻资产、高护城河"的标准存在明显差距。<br><br>
+          <strong>结论：</strong>对于周期投资者，美光是战术性机遇；对严格价值投资者，需等待更确定的周期低点与 HBM 差异化证明。
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>美光科技 — 投资分析报告 2025</span>
+    <span class="pf-gold">CONFIDENTIAL</span>
+    <span>PAGE 3</span>
+  </div>
+</div>
+
 </body>
 </html>

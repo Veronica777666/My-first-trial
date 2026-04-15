@@ -2396,5 +2396,468 @@
   </div>
 </div>
 
+
+<!-- ══════════════════════ PAGE 8 — MANAGEMENT ══════════════════════ -->
+<style>
+  /* ── MANAGEMENT PAGE STYLES ── */
+  .mgmt-hero {
+    background: linear-gradient(135deg, #0a1628 0%, #102d6e 100%);
+    border-radius: 10px;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 28px;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+
+  .ceo-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c8a84b, #e0c060);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    flex-shrink: 0;
+    border: 3px solid rgba(200,168,75,0.4);
+  }
+
+  .ceo-info {}
+  .ceo-name {
+    font-size: 22px; font-weight: 700; color: #fff;
+    font-family: 'Noto Serif SC', serif; margin-bottom: 4px;
+  }
+  .ceo-title {
+    font-size: 12px; color: #c8a84b; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .ceo-bio {
+    font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.8;
+    max-width: 480px;
+  }
+
+  .ceo-stats {
+    display: flex; flex-direction: column; gap: 10px;
+    border-left: 1px solid rgba(255,255,255,0.12);
+    padding-left: 24px;
+  }
+
+  .ceo-stat-item { text-align: center; }
+  .ceo-stat-val {
+    font-size: 20px; font-weight: 700; color: #c8a84b;
+    font-family: 'Noto Serif SC', serif; line-height: 1;
+  }
+  .ceo-stat-label {
+    font-size: 10px; color: rgba(255,255,255,0.4);
+    letter-spacing: 1px; margin-top: 2px;
+  }
+
+  /* Leadership table */
+  .leader-table { width: 100%; border-collapse: collapse; }
+  .leader-table thead tr {
+    background: #0a1628;
+  }
+  .leader-table th {
+    padding: 9px 14px; font-size: 10px; font-weight: 700;
+    color: rgba(255,255,255,0.6); letter-spacing: 2px;
+    text-transform: uppercase; text-align: left;
+  }
+  .leader-table td {
+    padding: 10px 14px; font-size: 12px; border-bottom: 1px solid #f2f2f2;
+    color: #333; vertical-align: top;
+  }
+  .leader-table td:first-child { font-weight: 700; color: #0a1628; }
+  .leader-table td .role { font-size: 11px; color: #888; font-weight: 400; margin-top: 2px; }
+  .leader-table td .tenure { font-size: 11px; color: #c8a84b; }
+  .leader-table tr:last-child td { border-bottom: none; }
+
+  /* Buffett criteria for management */
+  .mgmt-criteria {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    margin-top: 18px;
+  }
+
+  .criteria-card {
+    border-radius: 8px; padding: 14px 18px;
+    border: 1px solid #e4e4e4; background: #fff;
+  }
+
+  .criteria-card-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+  }
+
+  .criteria-icon { font-size: 20px; }
+
+  .criteria-title { font-size: 13px; font-weight: 700; color: #0a1628; }
+
+  .criteria-rating {
+    margin-left: auto; padding: 2px 10px; border-radius: 12px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  }
+
+  .r-pass  { background: #e8f4e8; color: #27ae60; }
+  .r-mixed { background: #fff8e8; color: #c8a84b; }
+  .r-fail  { background: #fde8e8; color: #c0392b; }
+
+  .criteria-text { font-size: 12px; color: #555; line-height: 1.75; }
+</style>
+
+<div class="page section-page">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-header-text">
+      <div class="section-header-label">Culture & Management</div>
+      <div class="section-header-title">公司文化与管理层 — CEO 画像与领导团队</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+
+    <!-- CEO Hero -->
+    <div class="mgmt-hero">
+      <div class="ceo-avatar">👨‍💼</div>
+      <div class="ceo-info">
+        <div class="ceo-name">Sanjay Mehrotra</div>
+        <div class="ceo-title">President &amp; CEO &nbsp;·&nbsp; 2017年至今</div>
+        <div class="ceo-bio">
+          SanDisk 联合创始人，在闪存领域拥有超过 <strong style="color:#c8a84b;">40 年</strong>技术与经营经验。2017 年加入美光后主导大刀阔斧的战略重组——剥离非核心业务、重建研发体系、布局 HBM，并主导获取 CHIPS Act $6.1B 补贴。以<strong style="color:#c8a84b;">技术出身+运营思维</strong>著称，投资者信任度持续提升。
+        </div>
+      </div>
+      <div class="ceo-stats">
+        <div class="ceo-stat-item">
+          <div class="ceo-stat-val">40+</div>
+          <div class="ceo-stat-label">年行业经验</div>
+        </div>
+        <div class="ceo-stat-item">
+          <div class="ceo-stat-val">8年</div>
+          <div class="ceo-stat-label">任职美光</div>
+        </div>
+        <div class="ceo-stat-item">
+          <div class="ceo-stat-val">$6.1B</div>
+          <div class="ceo-stat-label">CHIPS 补贴</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leadership Team Table -->
+    <div style="margin-bottom:18px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#0a1628;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #0a1628;display:flex;align-items:center;gap:8px;">
+        <span style="width:14px;height:3px;background:#c8a84b;display:inline-block;"></span>
+        核心管理团队
+      </div>
+      <table class="leader-table">
+        <thead>
+          <tr>
+            <th style="width:160px;">姓名</th>
+            <th style="width:180px;">职务</th>
+            <th>背景与贡献</th>
+            <th style="width:100px;">巴菲特视角</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Sanjay Mehrotra<div class="tenure">任职 8 年</div></td>
+            <td>总裁 &amp; CEO<div class="role">President &amp; CEO</div></td>
+            <td>SanDisk 联创，主导 HBM 战略转型与 CHIPS Act 谈判</td>
+            <td><span class="signal signal-green">强烈认可</span></td>
+          </tr>
+          <tr>
+            <td>Mark Murphy<div class="tenure">任职 4 年</div></td>
+            <td>CFO<div class="role">首席财务官</div></td>
+            <td>前 Lattice Semiconductor CFO，资本结构优化与债务管理</td>
+            <td><span class="signal signal-green">稳健</span></td>
+          </tr>
+          <tr>
+            <td>Sumit Sadana<div class="tenure">任职 11 年</div></td>
+            <td>首席商务官<div class="role">Chief Business Officer</div></td>
+            <td>客户战略负责人，英伟达/谷歌等大客户关系维护</td>
+            <td><span class="signal signal-green">关键人才</span></td>
+          </tr>
+          <tr>
+            <td>Scott DeBoer<div class="tenure">任职 20+ 年</div></td>
+            <td>EVP 技术研发<div class="role">Technology &amp; Products</div></td>
+            <td>美光内部成长，1nm DRAM 路线图主导者</td>
+            <td><span class="signal signal-yellow">技术依赖</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Buffett Management Criteria -->
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#0a1628;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #0a1628;display:flex;align-items:center;gap:8px;">
+      <span style="width:14px;height:3px;background:#c8a84b;display:inline-block;"></span>
+      巴菲特管理层评估框架
+    </div>
+    <div class="mgmt-criteria">
+      <div class="criteria-card">
+        <div class="criteria-card-header">
+          <div class="criteria-icon">🎯</div>
+          <div class="criteria-title">诚信与股东导向</div>
+          <div class="criteria-rating r-pass">通过</div>
+        </div>
+        <div class="criteria-text">Mehrotra 历次财报未见重大误导性陈述，主动披露周期下行风险；期权激励与长期股东利益挂钩；无大规模内部人抛售记录，管理层持股比例合理。</div>
+      </div>
+      <div class="criteria-card">
+        <div class="criteria-card-header">
+          <div class="criteria-icon">💼</div>
+          <div class="criteria-title">资本配置能力</div>
+          <div class="criteria-rating r-mixed">尚可</div>
+        </div>
+        <div class="criteria-text">成功把握 HBM 投资时机，CHIPS Act 谈判成果显著。但在存储周期谷底仍维持高 Capex，引发资本纪律争议；股票回购规模受限于现金流压力。</div>
+      </div>
+      <div class="criteria-card">
+        <div class="criteria-card-header">
+          <div class="criteria-icon">🔭</div>
+          <div class="criteria-title">长期战略清晰度</div>
+          <div class="criteria-rating r-pass">通过</div>
+        </div>
+        <div class="criteria-text">"AI 时代存储基础设施"定位清晰，HBM → 数据中心 → 汽车的路线图一致；拒绝短期利润而坚持研发投入的取舍展现了长期思维。</div>
+      </div>
+      <div class="criteria-card">
+        <div class="criteria-card-header">
+          <div class="criteria-icon">🌀</div>
+          <div class="criteria-title">危机应对能力</div>
+          <div class="criteria-rating r-pass">通过</div>
+        </div>
+        <div class="criteria-text">2023 年存储价格崩盘期间，主动削减产能保护价格底部，避免市场恶性竞争；疫情供应链危机期间快速响应，维护核心客户关系未见重大流失。</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>美光科技 — 投资分析报告 2025</span>
+    <span class="pf-gold">CONFIDENTIAL</span>
+    <span>PAGE 8</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ PAGE 9 — CULTURE ══════════════════════ -->
+<style>
+  .culture-pillar {
+    border-radius: 8px; border: 1px solid #e4e4e4;
+    overflow: hidden; background: #fff;
+  }
+
+  .culture-pillar-top {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .culture-pillar-icon { font-size: 28px; margin-bottom: 8px; }
+  .culture-pillar-name { font-size: 14px; font-weight: 700; color: #0a1628; margin-bottom: 4px; }
+  .culture-pillar-sub  { font-size: 11px; color: #888; }
+
+  .culture-pillar-body { padding: 12px 20px; }
+  .culture-pillar-body ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .culture-pillar-body li { font-size: 12px; color: #555; padding-left: 14px; position: relative; line-height: 1.6; }
+  .culture-pillar-body li::before { content: '›'; position: absolute; left: 0; color: #c8a84b; font-weight: 700; }
+
+  .culture-pillar-footer {
+    padding: 8px 20px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  .cf-strong { background: #e8f4e8; color: #27ae60; }
+  .cf-medium { background: #fff8e8; color: #c8a84b; }
+
+  /* Quote wall */
+  .quote-wall {
+    background: linear-gradient(135deg, #0a1628 0%, #0d2550 100%);
+    border-radius: 10px; padding: 24px 28px;
+    margin-top: 20px;
+  }
+
+  .quote-wall-title {
+    font-size: 10px; letter-spacing: 3px; color: #c8a84b;
+    text-transform: uppercase; margin-bottom: 18px; font-weight: 600;
+  }
+
+  .quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .quote-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px; padding: 14px 16px;
+    border-left: 3px solid #c8a84b;
+  }
+
+  .quote-text {
+    font-size: 12.5px; color: rgba(255,255,255,0.8);
+    line-height: 1.8; font-style: italic; margin-bottom: 8px;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .quote-source { font-size: 10px; color: #c8a84b; font-weight: 700; letter-spacing: 1px; }
+
+  /* Buffett verdict on culture */
+  .culture-verdict {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px;
+  }
+
+  .verdict-pass {
+    background: #e8f4e8; border-radius: 8px; padding: 16px 20px;
+    border-left: 4px solid #27ae60;
+  }
+
+  .verdict-concern {
+    background: #fff8e8; border-radius: 8px; padding: 16px 20px;
+    border-left: 4px solid #c8a84b;
+  }
+
+  .verdict-head {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+
+  .verdict-pass   .verdict-head { color: #27ae60; }
+  .verdict-concern .verdict-head { color: #c8a84b; }
+
+  .verdict-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .verdict-list li { font-size: 12px; color: #444; padding-left: 14px; position: relative; line-height: 1.6; }
+  .verdict-list li::before { content: '•'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-pass    .verdict-list li::before { color: #27ae60; }
+  .verdict-concern .verdict-list li::before { color: #c8a84b; }
+</style>
+
+<div class="page section-page">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-header-text">
+      <div class="section-header-label">Culture & Management</div>
+      <div class="section-header-title">公司文化与管理层 — 文化基因与巴菲特标准</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+
+    <!-- Culture Pillars -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
+
+      <div class="culture-pillar">
+        <div class="culture-pillar-top">
+          <div class="culture-pillar-icon">🔬</div>
+          <div class="culture-pillar-name">技术至上</div>
+          <div class="culture-pillar-sub">Engineering First</div>
+        </div>
+        <div class="culture-pillar-body">
+          <ul>
+            <li>研发团队占员工总数约 30%</li>
+            <li>年申请专利 3,000+ 项</li>
+            <li>内部晋升文化，技术路线图主导战略</li>
+            <li>1nm DRAM 全球首发目标</li>
+          </ul>
+        </div>
+        <div class="culture-pillar-footer cf-strong">巴菲特认可 · 技术护城河基础</div>
+      </div>
+
+      <div class="culture-pillar">
+        <div class="culture-pillar-top">
+          <div class="culture-pillar-icon">🌱</div>
+          <div class="culture-pillar-name">长期主义</div>
+          <div class="culture-pillar-sub">Long-Term Thinking</div>
+        </div>
+        <div class="culture-pillar-body">
+          <ul>
+            <li>拒绝价格战维护行业健康</li>
+            <li>周期谷底坚持研发投入</li>
+            <li>10 年以上技术路线规划</li>
+            <li>客户合作关系深度绑定</li>
+          </ul>
+        </div>
+        <div class="culture-pillar-footer cf-strong">高度契合巴菲特理念</div>
+      </div>
+
+      <div class="culture-pillar">
+        <div class="culture-pillar-top">
+          <div class="culture-pillar-icon">🇺🇸</div>
+          <div class="culture-pillar-name">美国制造</div>
+          <div class="culture-pillar-sub">Made in America</div>
+        </div>
+        <div class="culture-pillar-body">
+          <ul>
+            <li>爱达荷州博伊西总部+Fab</li>
+            <li>弗吉尼亚州新 Fab 建设中</li>
+            <li>CHIPS Act 战略合作伙伴</li>
+            <li>供应链本土化战略布局</li>
+          </ul>
+        </div>
+        <div class="culture-pillar-footer cf-strong">地缘政治护城河</div>
+      </div>
+
+      <div class="culture-pillar">
+        <div class="culture-pillar-top">
+          <div class="culture-pillar-icon">🌿</div>
+          <div class="culture-pillar-name">ESG 承诺</div>
+          <div class="culture-pillar-sub">Sustainability</div>
+        </div>
+        <div class="culture-pillar-body">
+          <ul>
+            <li>2050 年净零排放目标</li>
+            <li>水资源再利用率 >75%</li>
+            <li>员工多元化比例持续提升</li>
+            <li>供应链可持续审计体系</li>
+          </ul>
+        </div>
+        <div class="culture-pillar-footer cf-medium">合规加分项</div>
+      </div>
+
+    </div>
+
+    <!-- Quote Wall -->
+    <div class="quote-wall">
+      <div class="quote-wall-title">管理层关键表态 — 巴菲特式诚信检验</div>
+      <div class="quote-grid">
+        <div class="quote-item">
+          <div class="quote-text">"我们不会为了短期市场份额而牺牲定价纪律。存储行业的健康需要所有参与者共同维护。"</div>
+          <div class="quote-source">— Sanjay Mehrotra，2023年财报电话会议</div>
+        </div>
+        <div class="quote-item">
+          <div class="quote-text">"HBM 不是一个跟风决定，而是我们五年前就开始布局的结果。技术领先需要提前十年做准备。"</div>
+          <div class="quote-source">— Sanjay Mehrotra，2024年投资者日</div>
+        </div>
+        <div class="quote-item">
+          <div class="quote-text">"美光在美国的投资不仅是商业决策，更是对国家技术主权的承诺。我们是美国半导体战略的核心支柱。"</div>
+          <div class="quote-source">— Sanjay Mehrotra，白宫声明，2023年</div>
+        </div>
+        <div class="quote-item">
+          <div class="quote-text">"我们的目标是成为每一个存储市场的技术领导者，而不仅仅是规模最大的参与者。质量第一，规模第二。"</div>
+          <div class="quote-source">— Sanjay Mehrotra，CES 2024</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buffett Culture Verdict -->
+    <div class="culture-verdict">
+      <div class="verdict-pass">
+        <div class="verdict-head">✔ 巴菲特文化认可项</div>
+        <ul class="verdict-list">
+          <li>管理层言行一致，周期中无重大战略摇摆</li>
+          <li>长期技术投入优先于短期利润，符合巴菲特"不做季度导向"原则</li>
+          <li>诚信披露：主动提示周期风险，不过度美化业绩</li>
+          <li>CEO 持股比例合理，利益与股东高度绑定</li>
+          <li>拒绝价格战的行业自律，体现长期价值观</li>
+        </ul>
+      </div>
+      <div class="verdict-concern">
+        <div class="verdict-head">⚠ 巴菲特潜在关切项</div>
+        <ul class="verdict-list">
+          <li>管理层薪酬中股权激励占比过高，可能引发短期股价管理动机</li>
+          <li>Capex 高企期未见显著股票回购，股东回报政策待改善</li>
+          <li>技术路线高度依赖少数核心工程师，人才集中风险</li>
+          <li>与三星/海力士的军备竞赛可能迫使超出理性的资本投入</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>美光科技 — 投资分析报告 2025</span>
+    <span class="pf-gold">CONFIDENTIAL</span>
+    <span>PAGE 9</span>
+  </div>
+</div>
+
 </body>
 </html>
